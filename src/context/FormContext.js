@@ -12,7 +12,7 @@ export const FormProvider = ({ children }) => {
     1:"Shipping info",
     2:"Opt-In"
   }
-  const [page,setPage] = useState(0)
+  const [page, setPage] = useState(0)
   
   const [data, setData] = useState({
     billFirstName: "",
@@ -20,7 +20,7 @@ export const FormProvider = ({ children }) => {
     billAddress1: "",
     billAddress2: "",
     billCity: "",
-    billState: "",
+    billState: "Alabama",
     billZipCode: "",
     sameAsBilling: false,
     shipFirstName: "",
@@ -28,7 +28,7 @@ export const FormProvider = ({ children }) => {
     shipAddress1: "",
     shipAddress2: "",
     shipCity: "",
-    shipState: "",
+    shipState: "Alabama",
     shipZipCode: "",
     optInNews: false
   })
@@ -90,16 +90,38 @@ export const FormProvider = ({ children }) => {
     setPage((prev)=>prev+1)
   }
   
+  const firstPageDone = Object.keys(data)
+  .filter(key => key.startsWith('bill') && key !== 'billAddress2')
+  .map(key => data[key])
+  .every(Boolean)
+  console.log(data)
+  
+  
+  const secondPageDone = Object.keys(data)
+    .filter(key => key.startsWith('ship') && key !== 'shipAddress2')
+    .map(key => data[key])
+    .every(Boolean)
+    
+  //! we use both these functions to determine whether to disable the button or not
+  
+  
   const disablePrev = page === 0
   
   const prevHide = page === 0 && "remove-button"
 
   const nextHide = page === Object.keys(title).length - 1 && "remove-button"
 
-  const submitHide = page !== Object.keys(title).length - 1 && "remove-button"
+  const submitHide = page !== Object.keys(title).length - 1 && "remove-button" //TODO: make it the invert of nextHide
   
+  //^ if we are in the last page OR we are on the first page but first page is not done
+  const disableNext =
+    (page === Object.keys(title).length - 1)
+    || (page === 0 && !firstPageDone)
+    || (page === 1 && !secondPageDone)
+
+    
     return (
-    <FormContext.Provider value={{data, setData,title,page,setPage,canSave,handleChange,handlePrev,handleNext,prevHide,nextHide,submitHide,disablePrev}}>
+    <FormContext.Provider value={{data, setData,title,page,setPage,canSave,handleChange,handlePrev,handleNext,prevHide,nextHide,submitHide,disablePrev,disableNext}}>
         {children}
     </FormContext.Provider>
   )

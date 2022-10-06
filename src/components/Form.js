@@ -4,7 +4,7 @@ import FormInput from "./FormInput"
 
 const Form = () => {
 
-    const { data,title,page,setPage,handleChange,canSave,handlePrev,handleNext,prevHide,nextHide,submitHide,disablePrev } = useFormContext()
+    const { data,title,page,canSave,handlePrev,handleNext,prevHide,nextHide,submitHide,disablePrev,disableNext } = useFormContext()
  
     const handleSubmit = e => {
         e.preventDefault()
